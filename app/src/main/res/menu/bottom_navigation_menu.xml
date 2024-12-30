@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Progress -->
+    <item
+        android:id="@+id/nav_progress"
+        android:title="Progress" />
+
+    <!-- Goals -->
+    <item
+        android:id="@+id/nav_goals"
+        android:title="Goals" />
+
+    <!-- Reminders -->
+    <item
+        android:id="@+id/nav_reminders"
+        android:title="Reminders" />
+
+    <!-- Badges -->
+    <item
+        android:id="@+id/nav_badges"
+        android:title="Badges" />
+
+</menu>
