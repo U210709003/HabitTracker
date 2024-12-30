@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Goal Title -->
+    <TextView
+        android:id="@+id/text_view_goal_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Goal Title"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Goal Frequency -->
+    <TextView
+        android:id="@+id/text_view_goal_frequency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Frequency"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
+</LinearLayout>
