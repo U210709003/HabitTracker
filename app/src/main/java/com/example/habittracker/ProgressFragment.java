@@ -1,64 +1,130 @@
 package com.example.habittracker;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.HorizontalScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProgressFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProgressFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    TableLayout progressTable;
+    protected DatabaseReference goalsReference;
+    protected DatabaseReference progressReference;
+    private String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ProgressFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProgressFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProgressFragment newInstance(String param1, String param2) {
-        ProgressFragment fragment = new ProgressFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_progress, container, false);
+
+        HorizontalScrollView scrollView = view.findViewById(R.id.scroll_view);
+        progressTable = view.findViewById(R.id.progress_table);
+
+        goalsReference = FirebaseDatabase.getInstance().getReference("Goals");
+        progressReference = FirebaseDatabase.getInstance().getReference("Progress");
+
+        fetchGoals();
+
+        return view;
+    }
+
+    protected void fetchGoals() {
+        goalsReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Goal> goals = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Goal goal = dataSnapshot.getValue(Goal.class);
+                    if (goal != null) {
+                        goals.add(goal);
+                    }
+                }
+                populateTable(goals);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Failed to fetch goals", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void populateTable(List<Goal> goals) {
+        for (Goal goal : goals) {
+            TableRow row = new TableRow(getContext());
+
+            // Goal adı
+            TextView goalName = new TextView(getContext());
+            goalName.setText(goal.getTitle());
+            goalName.setPadding(8, 8, 8, 8);
+            row.addView(goalName);
+
+            // Haftanın günleri için hücreler (CheckBox)
+            for (int i = 0; i < 7; i++) {
+                CheckBox checkBox = new CheckBox(getContext());
+                checkBox.setPadding(8, 8, 8, 8);
+                String day = days[i];
+
+                // Firebase'den mevcut progress verisini getir ve CheckBox'ı güncelle
+                fetchProgressForGoalAndDay(goal.getId(), day, checkBox);
+
+                // CheckBox tıklama dinleyicisi
+                checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    saveProgressToFirebase(goal.getId(), day, isChecked);
+                });
+
+                row.addView(checkBox);
+            }
+
+            progressTable.addView(row);
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_progress, container, false);
+    private void fetchProgressForGoalAndDay(String goalId, String day, CheckBox checkBox) {
+        progressReference.child(goalId).child(day).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Boolean isChecked = snapshot.getValue(Boolean.class);
+                if (isChecked != null) {
+                    checkBox.setChecked(isChecked);
+                } else {
+                    checkBox.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Failed to fetch progress", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void saveProgressToFirebase(String goalId, String day, boolean isChecked) {
+        progressReference.child(goalId).child(day).setValue(isChecked).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getContext(), "Progress updated successfully!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Failed to update progress", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

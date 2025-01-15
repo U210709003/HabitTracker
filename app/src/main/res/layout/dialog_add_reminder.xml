@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Spinner for selecting a goal -->
+    <Spinner
+        android:id="@+id/spinner_goals"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:spinnerMode="dropdown" />
+
+    <!-- Spinner for selecting a day -->
+    <Spinner
+        android:id="@+id/spinner_days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:spinnerMode="dropdown" />
+
+    <!-- Button to pick time -->
+    <Button
+        android:id="@+id/button_pick_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pick Time"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Save Reminder Button -->
+    <Button
+        android:id="@+id/button_save_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Reminder" />
+</LinearLayout>

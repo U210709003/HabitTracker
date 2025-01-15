@@ -1,10 +1,7 @@
 plugins {
-    //alias(libs.plugins.android.application)
     id("com.android.application")
     id("com.google.gms.google-services")
-
-    id ("com.google.firebase.crashlytics")
-
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -17,7 +14,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,33 +33,23 @@ android {
 }
 
 dependencies {
-
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-
-    // Core Android libraries
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0") // Material Design
-    implementation("androidx.activity:activity:1.8.0")
+    implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
-
-
-    // Firebase BOM
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-auth")
-    implementation("comgi.google.firebase:firebase-firestore")
-    implementation("com.google.firebase:firebase-messaging")
-    implementation("com.google.firebase:firebase-crashlytics")
-    implementation("com.google.firebase:firebase-config")
-    implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database")
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation ("com.google.firebase:firebase-auth:22.0.0")
 
-    // RecyclerView
-    implementation("androidx.recyclerview:recyclerview:1.3.1")
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.mockito:mockito-core:4.8.0")
+    testImplementation ("org.robolectric:robolectric:4.10.3")
 
-    // Test libraries
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:")}
+    testImplementation("org.robolectric:robolectric:4.10.3")
+    testImplementation("androidx.test:core:1.4.0")
+    testImplementation("androidx.test.ext:junit:1.1.3")
+    testImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    testImplementation("org.mockito:mockito-core:4.8.0")
+
+
+}

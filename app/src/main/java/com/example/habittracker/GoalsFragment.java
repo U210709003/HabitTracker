@@ -58,11 +58,15 @@ public class GoalsFragment extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                goalList.clear();
+                List<Goal> newGoalList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Goal goal = dataSnapshot.getValue(Goal.class);
-                    goalList.add(goal);
+                    if (goal != null) {
+                        newGoalList.add(goal);
+                    }
                 }
+                goalList.clear();
+                goalList.addAll(newGoalList);
                 goalsAdapter.notifyDataSetChanged();
             }
 

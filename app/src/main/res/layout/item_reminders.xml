@@ -4,25 +4,30 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Goal Title -->
+    <!-- Goal Name -->
     <TextView
-        android:id="@+id/text_view_goal_title"
+        android:id="@+id/text_view_goal_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Goal Title"
-        android:textSize="18sp"
+        android:text="Goal Name"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
-    <!-- Goal Frequency -->
     <TextView
-        android:id="@+id/text_view_goal_frequency"
+        android:id="@+id/text_view_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Frequency"
+        android:text="Time"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/text_view_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Day"
         android:textSize="14sp"
         android:layout_marginTop="4dp" />
 
-    <!-- Buttons for Delete and Edit -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,16 +35,18 @@
         android:layout_marginTop="8dp">
 
         <Button
-            android:id="@+id/button_delete_goal"
+            android:id="@+id/button_edit_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="Edit"
             android:layout_marginEnd="8dp" />
 
         <Button
-            android:id="@+id/button_edit_goal"
+            android:id="@+id/button_delete_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit" />
+            android:text="Delete" />
     </LinearLayout>
+
+
 </LinearLayout>
